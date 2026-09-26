@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ Clique!</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%}
+body{min-height:100vh;display:flex;justify-content:center;align-items:center;font-family:Arial,sans-serif;color:#fff;overflow:hidden;background:radial-gradient(circle at 50% 35%,rgba(90,120,255,.25),transparent 35%),linear-gradient(135deg,#080b19,#111936 55%,#070914)}
+.card{width:min(92vw,520px);min-height:560px;padding:35px 25px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px solid rgba(255,255,255,.12);border-radius:32px;background:rgba(255,255,255,.07);box-shadow:0 25px 70px rgba(0,0,0,.45);backdrop-filter:blur(14px)}
+h1{margin:0 0 8px;font-size:clamp(2rem,7vw,3.2rem)}.subtitle{margin:0 0 30px;color:#b9c1dc}
+#clickButton{width:210px;height:210px;border:0;border-radius:50%;cursor:pointer;color:white;font-size:1.45rem;font-weight:900;background:linear-gradient(145deg,#7181ff,#4054e8);box-shadow:0 0 0 10px rgba(91,108,255,.1),0 18px 45px rgba(65,82,232,.42),inset 0 3px 8px rgba(255,255,255,.25);transition:transform .08s ease;user-select:none}
+#clickButton:hover{box-shadow:0 0 0 15px rgba(91,108,255,.1),0 20px 60px rgba(65,82,232,.6),inset 0 3px 8px rgba(255,255,255,.28)}
+#clickButton:active{transform:scale(.9)}.pulse{animation:pulse .18s ease}
+@keyframes pulse{0%{transform:scale(.9)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+.counter-box{margin-top:32px;padding:15px 40px;min-width:230px;border-radius:18px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.09)}
+.label{display:block;color:#aeb7d4;font-size:.8rem;text-transform:uppercase;letter-spacing:2px;margin-bottom:3px}
+#counter{font-size:2.8rem;font-weight:900}.stats{display:flex;gap:10px;margin-top:12px}.stat{padding:8px 14px;border-radius:10px;background:rgba(255,255,255,.06);color:#c8cfea;font-size:.85rem}.stat strong{color:white}
+#message{height:25px;margin-top:15px;color:#91a0ff;font-weight:800}.reset{margin-top:18px;border:0;padding:10px 18px;border-radius:10px;color:#cbd2ed;background:rgba(255,255,255,.08);cursor:pointer}
+@media(max-width:480px){.card{min-height:92vh;border-radius:24px}#clickButton{width:180px;height:180px}}
+</style>
+</head>
+<body>
+<main class="card">
+<h1>⚡ Clique!</h1>
+<p class="subtitle">Clique no botão e aumente seu contador.</p>
+<button id="clickButton">CLIQUE AQUI</button>
+<div class="counter-box"><span class="label">Cliques</span><span id="counter">0</span></div>
+<div id="message"></div>
+<div class="stats"><div class="stat">Recorde: <strong id="record">0</strong></div><div class="stat">Nível: <strong id="level">1</strong></div></div>
+<button class="reset" id="resetButton">🔄 Zerar contador</button>
+</main>
+<script>
+const clickButton=document.getElementById("clickButton"),counter=document.getElementById("counter"),message=document.getElementById("message"),resetButton=document.getElementById("resetButton"),recordElement=document.getElementById("record"),levelElement=document.getElementById("level");
+let clicks=Number(localStorage.getItem("clicks"))||0,record=Number(localStorage.getItem("record"))||0;
+function updateScreen(){counter.textContent=clicks.toLocaleString("pt-BR");recordElement.textContent=record.toLocaleString("pt-BR");levelElement.textContent=Math.floor(clicks/100)+1}
+clickButton.addEventListener("click",()=>{clicks++;if(clicks>record){record=clicks;localStorage.setItem("record",record)}localStorage.setItem("clicks",clicks);updateScreen();clickButton.classList.remove("pulse");void clickButton.offsetWidth;clickButton.classList.add("pulse");if(clicks===10)message.textContent="🔥 10 cliques!";else if(clicks===50)message.textContent="🚀 50 cliques!";else if(clicks===100)message.textContent="🏆 100 cliques!";else if(clicks%100===0)message.textContent="💥 Mandou muito bem!";else message.textContent=""});
+resetButton.addEventListener("click",()=>{if(confirm("Tem certeza que quer zerar o contador?")){clicks=0;localStorage.removeItem("clicks");updateScreen();message.textContent=""}});
+updateScreen();
+</script>
+</body>
+</html>
