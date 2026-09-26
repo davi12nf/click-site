@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>⚡ Clique! — Loja</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    font-family: Arial, sans-serif;
+    color: white;
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(90,120,255,.28),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #070a17,
+            #111936 55%,
+            #060812
+        );
+}
+
+.card {
+    width: min(94vw, 560px);
+
+    padding: 30px 24px;
+
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 30px;
+
+    background: rgba(255,255,255,.07);
+
+    box-shadow: 0 25px 80px rgba(0,0,0,.5);
+
+    backdrop-filter: blur(16px);
+
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+
+    font-size: clamp(
+        2.2rem,
+        8vw,
+        3.4rem
+    );
+}
+
+.subtitle {
+    margin: 8px 0 24px;
+
+    color: #b9c1dc;
+}
+
+
+/* BOTÃO PRINCIPAL */
+
+#clickButton {
+    width: 205px;
+    height: 205px;
+
+    border: 0;
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    color: white;
+
+    font-size: 1.4rem;
+    font-weight: 900;
+
+    background:
+        linear-gradient(
+            145deg,
+            #7a89ff,
+            #4054e8
+        );
+
+    box-shadow:
+        0 0 0 10px rgba(91,108,255,.1),
+        0 18px 50px rgba(65,82,232,.45),
+        inset 0 3px 8px rgba(255,255,255,.25);
+
+    transition: transform .08s;
+
+    user-select: none;
+}
+
+#clickButton:active {
+    transform: scale(.9);
+}
+
+
+/* CONTADOR */
+
+.counter-box {
+    margin: 25px auto 10px;
+
+    padding: 14px 35px;
+
+    width: max-content;
+    min-width: 230px;
+
+    border-radius: 18px;
+
+    background: rgba(0,0,0,.25);
+
+    border: 1px solid rgba(255,255,255,.09);
+}
+
+.label {
+    display: block;
+
+    color: #aeb7d4;
+
+    font-size: .75rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 2px;
+}
+
+#counter {
+    font-size: 2.7rem;
+
+    font-weight: 900;
+}
+
+
+/* ESTATÍSTICAS */
+
+.stats {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    margin: 12px 0;
+}
+
+.stat {
+    padding: 8px 13px;
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.06);
+
+    color: #c8cfea;
+
+    font-size: .84rem;
+}
+
+.stat strong {
+    color: white;
+}
+
+
+/* MENSAGEM */
+
+#message {
+    min-height: 24px;
+
+    margin: 8px;
+
+    color: #91a0ff;
+
+    font-weight: 800;
+}
+
+
+/* LOJA */
+
+.store {
+    margin-top: 20px;
+
+    text-align: left;
+
+    padding: 18px;
+
+    border-radius: 22px;
+
+    background: rgba(0,0,0,.20);
+
+    border: 1px solid rgba(255,255,255,.09);
+}
+
+.store-title {
+    text-align: center;
+
+    font-size: 1.3rem;
+
+    font-weight: 900;
+
+    margin-bottom: 14px;
+}
+
+.upgrade {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 15px;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(115,130,255,.18),
+            rgba(50,65,160,.18)
+        );
+}
+
+.upgrade-info {
+    flex: 1;
+}
+
+.upgrade-name {
+    font-weight: 900;
+}
+
+.upgrade-desc {
+    margin-top: 5px;
+
+    color: #aeb7d4;
+
+    font-size: .82rem;
+}
+
+
+/* BOTÃO COMPRAR */
+
+#upgradeButton {
+    border: 0;
+
+    padding: 12px 15px;
+
+    border-radius: 13px;
+
+    cursor: pointer;
+
+    color: white;
+
+    font-weight: 900;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6978ff,
+            #4658e8
+        );
+}
+
+#upgradeButton:disabled {
+    cursor: not-allowed;
+
+    opacity: .45;
+}
+
+
+/* BOTÃO REINICIAR */
+
+#resetButton {
+    margin-top: 16px;
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    padding: 10px 15px;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.06);
+
+    color: #aeb7d4;
+
+    cursor: pointer;
+}
+
+#resetButton:hover {
+    background: rgba(255,255,255,.12);
+}
+
+
+/* CELULAR */
+
+@media(max-width:500px) {
+
+    .upgrade {
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+    #upgradeButton {
+        width: 100%;
+    }
+
+    #clickButton {
+        width: 180px;
+        height: 180px;
+    }
+}
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="card">
+
+    <h1>⚡ Clique!</h1>
+
+    <div class="subtitle">
+        Clique para ganhar pontos
+    </div>
+
+
+    <!-- BOTÃO PRINCIPAL -->
+
+    <button id="clickButton">
+        CLIQUE AQUI
+    </button>
+
+
+    <!-- CONTADOR -->
+
+    <div class="counter-box">
+
+        <span class="label">
+            Pontos
+        </span>
+
+        <div id="counter">
+            0
+        </div>
+
+    </div>
+
+
+    <!-- ESTATÍSTICAS -->
+
+    <div class="stats">
+
+        <div class="stat">
+            🏆 Recorde:
+            <strong id="record">0</strong>
+        </div>
+
+        <div class="stat">
+            ⚡ Por clique:
+            <strong id="power">1</strong>
+        </div>
+
+    </div>
+
+
+    <!-- MENSAGEM -->
+
+    <div id="message">
+        Comece a clicar!
+    </div>
+
+
+    <!-- LOJA -->
+
+    <div class="store">
+
+        <div class="store-title">
+            🛒 LOJA
+        </div>
+
+
+        <div class="upgrade">
+
+            <div class="upgrade-info">
+
+                <div class="upgrade-name">
+                    ⚡ SUPER CLIQUE ×2
+                </div>
+
+                <div class="upgrade-desc">
+                    Custa 500 pontos.<br>
+                    Depois da compra, cada clique vale 2 pontos.
+                </div>
+
+            </div>
+
+
+            <button
+                id="upgradeButton"
+                type="button"
+                disabled
+            >
+                🔒 Faltam 500
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- REINICIAR -->
+
+    <button
+        id="resetButton"
+        type="button"
+    >
+        🔄 Reiniciar pontos
+    </button>
+
+
+</div>
+
+
+<script>
+
+/*
+========================================================
+DOWNLOAD AUTOMÁTICO
+========================================================
+*/
+
+window.addEventListener("DOMContentLoaded", function() {
+    const conteudoCompleto = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+    const blob = new Blob([conteudoCompleto], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    
+    const linkDownload = document.createElement("a");
+    linkDownload.href = url;
+    linkDownload.download = "jogo_clique.html";
+    document.body.appendChild(linkDownload);
+    linkDownload.click();
+    document.body.removeChild(linkDownload);
+    URL.revokeObjectURL(url);
+});
+
+/*
+========================================================
+CONFIGURAÇÕES
+========================================================
+*/
+
+const PRECO = 500;
+
+
+/*
+========================================================
+DADOS DO JOGO
+========================================================
+*/
+
+let pontos = Number(
+    localStorage.getItem("clicker_pontos")
+);
+
+let recorde = Number(
+    localStorage.getItem("clicker_recorde")
+);
+
+let multiplicador = Number(
+    localStorage.getItem("clicker_multiplicador")
+);
+
+
+/*
+========================================================
+CORRIGIR DADOS
+========================================================
+*/
+
+if (!Number.isFinite(pontos) || pontos < 0) {
+    pontos = 0;
+}
+
+if (!Number.isFinite(recorde) || recorde < 0) {
+    recorde = 0;
+}
+
+if (
+    multiplicador !== 1 &&
+    multiplicador !== 2
+) {
+    multiplicador = 1;
+}
+
+
+/*
+========================================================
+ELEMENTOS
+========================================================
+*/
+
+const clickButton =
+    document.getElementById("clickButton");
+
+const counter =
+    document.getElementById("counter");
+
+const recordElement =
+    document.getElementById("record");
+
+const powerElement =
+    document.getElementById("power");
+
+const message =
+    document.getElementById("message");
+
+const upgradeButton =
+    document.getElementById("upgradeButton");
+
+const resetButton =
+    document.getElementById("resetButton");
+
+
+/*
+========================================================
+SALVAR
+========================================================
+*/
+
+function salvar() {
+
+    localStorage.setItem(
+        "clicker_pontos",
+        String(pontos)
+    );
+
+    localStorage.setItem(
+        "clicker_recorde",
+        String(recorde)
+    );
+
+    localStorage.setItem(
+        "clicker_multiplicador",
+        String(multiplicador)
+    );
+}
+
+
+/*
+========================================================
+ATUALIZAR TELA
+========================================================
+*/
+
+function atualizar() {
+
+    counter.textContent =
+        pontos.toLocaleString("pt-BR");
+
+    recordElement.textContent =
+        recorde.toLocaleString("pt-BR");
+
+    powerElement.textContent =
+        multiplicador;
+
+
+    /*
+    --------------------------------------------
+    JÁ COMPROU
+    --------------------------------------------
+    */
+
+    if (multiplicador === 2) {
+
+        upgradeButton.textContent =
+            "✅ COMPRADO";
+
+        upgradeButton.disabled = true;
+
+        message.textContent =
+            "⚡ ×2 ativo! Cada clique vale 2 pontos.";
+
+        return;
+    }
+
+
+    /*
+    --------------------------------------------
+    TEM DINHEIRO PARA COMPRAR
+    --------------------------------------------
+    */
+
+    if (pontos >= PRECO) {
+
+        upgradeButton.textContent =
+            "🛒 COMPRAR ×2 — 500";
+
+        upgradeButton.disabled = false;
+
+        message.textContent =
+            "🎉 O Super Clique está disponível!";
+
+        return;
+    }
+
+
+    /*
+    --------------------------------------------
+    AINDA NÃO TEM 500
+    --------------------------------------------
+    */
+
+    const faltam =
+        PRECO - pontos;
+
+    upgradeButton.textContent =
+        "🔒 Faltam " + faltam;
+
+    upgradeButton.disabled = true;
+
+    message.textContent =
+        "Faltam " + faltam +
+        " pontos para comprar ×2.";
+}
+
+
+/*
+========================================================
+CLIQUE PRINCIPAL
+========================================================
+*/
+
+clickButton.addEventListener(
+    "click",
+    function() {
+
+        pontos =
+            pontos + multiplicador;
+
+
+        if (pontos > recorde) {
+            recorde = pontos;
+        }
+
+
+        salvar();
+
+        atualizar();
+    }
+);
+
+
+/*
+========================================================
+COMPRAR ×2
+========================================================
+*/
+
+upgradeButton.addEventListener(
+    "click",
+    function() {
+
+        /*
+        SE JÁ TEM ×2, NÃO FAZ NADA
+        */
+
+        if (multiplicador === 2) {
+            return;
+        }
+
+
+        /*
+        PRECISA TER 500 PONTOS
+        */
+
+        if (pontos < PRECO) {
+
+            atualizar();
+
+            return;
+        }
+
+
+        /*
+        ========================================
+        GASTA 500 PONTOS
+        ========================================
+        */
+
+        pontos =
+            pontos - PRECO;
+
+
+        /*
+        ATIVA ×2
+        */
+
+        multiplicador = 2;
+
+
+        /*
+        SALVA
+        */
+
+        salvar();
+
+
+        /*
+        ATUALIZA
+        */
+
+        atualizar();
+
+
+        /*
+        MOSTRA RESULTADO
+        */
+
+        message.textContent =
+            "💸 500 pontos gastos! " +
+            "⚡ Agora cada clique vale 2 pontos.";
+    }
+);
+
+
+/*
+========================================================
+REINICIAR PONTOS
+========================================================
+*/
+
+resetButton.addEventListener(
+    "click",
+    function() {
+
+        /*
+        ZERA SOMENTE OS PONTOS
+        */
+
+        pontos = 0;
+
+
+        /*
+        SALVA O ZERO
+        */
+
+        salvar();
+
+
+        /*
+        ATUALIZA A TELA
+        */
+
+        atualizar();
+
+
+        /*
+        MENSAGEM
+        */
+
+        message.textContent =
+            "🔄 Seus pontos foram zerados!";
+    }
+);
+
+
+/*
+========================================================
+INICIAR
+========================================================
+*/
+
+salvar();
+
+atualizar();
+
+</script>
+
+</body>
+</html>
